@@ -1,0 +1,21 @@
+version: "3"
+
+services:
+    lab-3-kotlin-web-app:
+        image: "lab-3-kotlin-web-app-1:latest"
+        container_name: lab-3-kotlin-web-app
+        ports:
+            - 8080:8080
+        depends_on:
+            - db
+        environment:
+            - SPRING_DATASOURCE_URL=jdbc:postgresql://db:5432/sheensekai
+            - SPRING_DATASOURCE_USERNAME=sheensekai
+            - SPRING_DATASOURCE_PASSWORD=somepassword
+          
+    db:
+        image: "postgres:13.1-alpine"
+        container_name: db
+        environment:
+            - POSTGRES_USER=sheensekai
+            - POSTGRES_PASSWORD=somepassword
