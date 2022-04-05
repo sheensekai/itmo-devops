@@ -8,11 +8,12 @@ RUN /usr/lib/jvm/java-11-openjdk/bin/jlink \
     --release-info="add:IMPLEMENTOR=radistao:IMPLEMENTOR_VERSION=radistao_JRE" \
     --output "$JAVA_MINIMAL"
 
-    
-    
+
+
 FROM openjdk:11 as build
-COPY ./ /src/devops-labs-spring-boot-web-app
-WORKDIR /src/devops-labs-spring-boot-web-app
+COPY ./ /src/springboot-backend
+WORKDIR /src/springboot-backend
+RUN chmod +x mvnw
 RUN ./mvnw package
 
 
@@ -22,7 +23,7 @@ ENV JAVA_HOME=/opt/java-minimal
 ENV PATH="$PATH:$JAVA_HOME/bin"
 
 COPY --from=system "$JAVA_HOME" "$JAVA_HOME"
-COPY --from=build /src/devops-labs-spring-boot-web-app/target/devops-labs-spring-boot-web-app-*.jar devops-labs-spring-boot-web-app.jar
+COPY --from=build /src/springboot-backend/target/springboot-backend-*.jar springboot-backend.jar
 
 EXPOSE 8080
-ENTRYPOINT ["java", "-jar", "devops-labs-spring-boot-web-app.jar"]
+ENTRYPOINT ["java", "-jar", "springboot-backend.jar"]
